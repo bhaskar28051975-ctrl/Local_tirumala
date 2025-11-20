@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tirumala Local Tour – BR HOLIDAYS</title>
+
+<style>
+:root{
+  --accent:#0b8f6b;
+  --dark:#083a61;
+  --bg:#f4f6f3;
+}
+
+/* BASIC */
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  color:#111;
+}
+
+/* HERO / BANNER */
+.hero{
+  position:relative;
+  background:url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThAlK2v-XnN6bvgiY4AGhg82oo0rIGT3BMWeCYIm-7jA&s=10')
+            center/cover no-repeat;
+  padding:60px 14px 120px;
+  text-align:center;
+  color:white;
+}
+.hero::after{
+  content:"";
+  position:absolute; inset:0;
+  background:rgba(0,0,0,0.45);
+}
+.hero .inner{
+  position:relative;
+  z-index:2;
+}
+.hero h1{
+  margin:0;
+  font-size:28px;
+  font-weight:800;
+  text-shadow:1px 1px 6px rgba(0,0,0,0.6);
+}
+.hero h2{
+  margin:8px 0 0;
+  font-size:16px;
+  font-weight:600;
+  color:#ffeaa7;
+}
+.hero .contact{
+  margin-top:12px;
+  display:inline-block;
+  background:rgba(0,0,0,0.4);
+  padding:8px 16px;
+  border-radius:20px;
+  font-weight:700;
+}
+
+/* DRIVER BOX */
+.driver-box{
+  display:none;
+  margin:-60px auto 20px;
+  width:92%;
+  max-width:400px;
+  background:white;
+  border-radius:14px;
+  padding:14px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.15);
+  display:flex;
+  gap:14px;
+  align-items:center;
+  position:relative;
+  z-index:10;
+}
+.driver-box img{
+  width:80px;
+  height:80px;
+  border-radius:10px;
+  object-fit:cover;
+}
+.driver-details{
+  flex:1;
+}
+.driver-details b{
+  color:#d35400;
+}
+
+/* LANGUAGE BUTTONS */
+.lang-bar{
+  text-align:center;
+  padding:12px;
+}
+.lang-bar button{
+  background:white;
+  border:1px solid #ccc;
+  padding:8px 12px;
+  margin:4px;
+  border-radius:20px;
+  font-weight:bold;
+  cursor:pointer;
+}
+.lang-bar button.active{
+  background:var(--accent);
+  color:white;
+  border-color:var(--accent);
+}
+
+/* SECTION TITLE */
+.section-title{
+  text-align:center;
+  margin:25px 0 10px;
+  font-size:22px;
+  font-weight:bold;
+  color:var(--dark);
+}
+
+/* GRID FOR CARDS */
+.container{
+  max-width:980px;
+  margin:0 auto;
+  padding:0 12px;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:14px;
+}
+.card{
+  background:white;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 4px 14px rgba(0,0,0,0.08);
+  cursor:pointer;
+}
+.card img{
+  width:100%;
+  height:160px;
+  object-fit:cover;
+}
+.card .body{
+  padding:12px;
+}
+.card h3{
+  margin:0;
+  font-size:16px;
+  color:var(--dark);
+}
+.card p{
+  margin:6px 0 0;
+  font-size:14px;
+  color:#555;
+}
+
+/* MODAL (Pop-up) */
+#modalOverlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.7);
+  z-index:2000;
+  justify-content:center;
+  align-items:center;
+  padding:16px;
+}
+.modal-box{
+  background:white;
+  width:100%;
+  max-width:500px;
+  border-radius:12px;
+  overflow:hidden;
+}
+.modal-box img{
+  width:100%;
+  height:250px;
+  object-fit:cover;
+}
+.modal-content{
+  padding:14px;
+}
+.close-btn{
+  margin-top:10px;
+  display:inline-block;
+  background:#d35400;
+  color:white;
+  padding:8px 14px;
+  border-radius:10px;
+  text-decoration:none;
+}
+
+/* WHATSAPP FLOAT */
+.wa-float{
+  position:fixed;
+  bottom:16px;
+  right:16px;
+  z-index:5000;
+}
+.wa-float a{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:60px;
+  height:60px;
+  font-size:28px;
+  background:#25D366;
+  color:white;
+  border-radius:50%;
+  text-decoration:none;
+  box-shadow:0 6px 20px rgba(0,0,0,0.25);
+}
+</style>
+</head>
+
+<body>
+
+<!-- HERO / TOP BANNER -->
+<section class="hero">
+  <div class="inner">
+    <h1 id="site_title">Tirumala Local Tour</h1>
+    <h2>BR HOLIDAYS</h2>
+    <div id="site_contact" class="contact">📞 91540 95125</div>
+  </div>
+</section>
+
+<!-- DRIVER BOX -->
+<div class="driver-box" id="driverBox">
+  <img id="drv_img" src="">
+  <div class="driver-details">
+    <div><b>Driver:</b> <span id="drv_name"></span></div>
+    <div><b>Phone:</b> <span id="drv_phone"></span></div>
+    <div><b>Taxi:</b> <span id="drv_taxi"></span></div>
+    <div><b>Fare:</b> ₹<span id="drv_price"></span> / person</div>
+  </div>
+</div>
+
+<!-- LANGUAGE BAR -->
+<div class="lang-bar">
+  <button onclick="setLang('en')" id="btn_en" class="active">ENGLISH</button>
+  <button onclick="setLang('te')" id="btn_te">TELUGU</button>
+  <button onclick="setLang('ta')" id="btn_ta">TAMIL</button>
+  <button onclick="setLang('kn')" id="btn_kn">KANNADA</button>
+  <button onclick="setLang('mr')" id="btn_mr">MARATHI</button>
+  <button onclick="setLang('hi')" id="btn_hi">HINDI</button>
+</div>
+
+<!-- ================================
+        SECTION TITLES (MULTI-LANG)
+     ================================ -->
+
+<script>
+const LANG = {
+  en: {
+    section1: "Tirumala Sightseeing Places",
+    section2: "Package Highlights",
+    section3: "Tour Images",
+    section4: "Send Inquiry",
+    contact: "📞 +91 91540 95125"
+  },
+  te: {
+    section1: "తిరుమల దర్శనీయ స్థలాలు",
+    section2: "ప్యాకేజ్ ముఖ్యాంశాలు",
+    section3: "ఫోటోలు",
+    section4: "సంప్రదించండి",
+    contact: "📞 +91 91540 95125"
+  },
+  ta: {
+    section1: "திருமலா சுற்றுலா இடங்கள்",
+    section2: "பேக்கேஜ் சிறப்பம்சங்கள்",
+    section3: "படங்கள்",
+    section4: "வினவுங்கள்",
+    contact: "📞 +91 91540 95125"
+  },
+  kn: {
+    section1: "ತಿರುಮಲ ಪ್ರವಾಸಿ ಸ್ಥಳಗಳು",
+    section2: "ಪ್ಯಾಕೇಜ್ ವಿಶೇಷತೆಗಳು",
+    section3: "ಫೋಟೊಗಳು",
+    section4: "ವಿಚಾರಣೆ ಕಳುಹಿಸಿ",
+    contact: "📞 +91 91540 95125"
+  },
+  mr: {
+    section1: "तिरुमला पर्यटन स्थळे",
+    section2: "पॅकेज वैशिष्ट्ये",
+    section3: "फोटो",
+    section4: "चौकशी पाठवा",
+    contact: "📞 +91 91540 95125"
+  },
+  hi: {
+    section1: "तिरुमला दर्शनीय स्थल",
+    section2: "पैकेज की विशेषताएँ",
+    section3: "फ़ोटो",
+    section4: "संपर्क करें",
+    contact: "📞 +91 91540 95125"
+  }
+};
+
+let CURRENT_LANG = "en";
+
+function setLang(lang){
+  CURRENT_LANG = lang;
+
+  // Update active button
+  document.querySelectorAll(".lang-pills button")
+    .forEach(btn=>{
+      btn.setAttribute("aria-pressed", btn.dataset.lang===lang ? "true" : "false");
+    });
+
+  document.getElementById("sec1_title").innerText = LANG[lang].section1;
+  document.getElementById("sec2_title").innerText = LANG[lang].section2;
+  document.getElementById("sec3_title").innerText = LANG[lang].section3;
+  document.getElementById("sec4_title").innerText = LANG[lang].section4;
+  document.getElementById("site_contact").innerText = LANG[lang].contact;
+}
+</script>
+
+<!-- ================================
+        CONTENT SECTION 1
+     ================================ -->
+
+<div class="container">
+  <h2 id="sec1_title" style="color:#083a61; margin-top:20px;">
+    Tirumala Sightseeing Places
+  </h2>
+
+  <div class="grid">
+    <div class="card" onclick="openModal('Akasaganga','One of the sacred waterfalls of Tirumala', 'https://assets.thehansindia.com/h-upload/2019/09/28/230965-akasaganga-751.webp')">
+      <img src="https://assets.thehansindia.com/h-upload/2019/09/28/230965-akasaganga-751.webp">
+      <div class="body">
+        <h3>Akasaganga</h3>
+        <p>Holy waterfall near the main temple.</p>
+      </div>
+    </div>
+
+    <div class="card" onclick="openModal('Papavinasam','Popular holy water spot for devotees', 'https://i.ytimg.com/vi/LdCYwH14r2E/maxresdefault.jpg')">
+      <img src="https://i.ytimg.com/vi/LdCYwH14r2E/maxresdefault.jpg">
+      <div class="body">
+        <h3>Papavinasam</h3>
+        <p>Devotees believe sins are washed away.</p>
+      </div>
+    </div>
+
+    <div class="card" onclick="openModal('Sila Thoranam','Natural arch formation in Tirumala', 'https://static.toiimg.com/thumb/imgsize-23456,msid-104741250,width-600,resizemode-6/104741250.jpg')">
+      <img src="https://static.toiimg.com/thumb/imgsize-23456,msid-104741250,width-600,resizemode-6/104741250.jpg">
+      <div class="body">
+        <h3>Sila Thoranam</h3>
+        <p>Rare natural rock arch.</p>
+      </div>
+    </div>
+
+    <div class="card" onclick="openModal('Japali Theertham','Sacred spot related to Lord Hanuman', 'https://i.ytimg.com/vi/4VuZySUdkOU/maxresdefault.jpg')">
+      <img src="https://i.ytimg.com/vi/4VuZySUdkOU/maxresdefault.jpg">
+      <div class="body">
+        <h3>Japali Theertham</h3>
+        <p>Holy forest trek to Hanuman theertham.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- END PART 2 -->
+<!-- ================================
+        SECTION 2 – PACKAGE HIGHLIGHTS
+     ================================ -->
+
+<h2 id="sec2_title" class="section-title">Package Highlights</h2>
+
+<div class="container">
+  <ul style="
+    background:white;
+    padding:15px;
+    border-radius:10px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    line-height:1.7;
+  ">
+    <li>🚕 Pick-up & Drop at Tirumala</li>
+    <li>⛰ Visit all sightseeing places</li>
+    <li>📸 Free Photo Stops</li>
+    <li>🕒 Approx trip time: 3.5 hours</li>
+    <li>💰 Best Price Guarantee</li>
+    <li>✔ Verified Drivers</li>
+  </ul>
+</div>
+
+<!-- ================================
+        SECTION 3 – TOUR IMAGES
+     ================================ -->
+
+<h2 id="sec3_title" class="section-title">Tour Images</h2>
+
+<div class="container">
+  <div style="
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+      gap:12px;
+  ">
+    <img src="https://i.ytimg.com/vi/LdCYwH14r2E/maxresdefault.jpg"
+         onclick="openPhoto(this.src)"
+         style="width:100%;border-radius:10px;cursor:pointer;">
+
+    <img src="https://static.toiimg.com/thumb/imgsize-23456,msid-104741250,width-600,resizemode-6/104741250.jpg"
+         onclick="openPhoto(this.src)"
+         style="width:100%;border-radius:10px;cursor:pointer;">
+
+    <img src="https://i.ytimg.com/vi/4VuZySUdkOU/maxresdefault.jpg"
+         onclick="openPhoto(this.src)"
+         style="width:100%;border-radius:10px;cursor:pointer;">
+
+    <img src="https://assets.thehansindia.com/h-upload/2019/09/28/230965-akasaganga-751.webp"
+         onclick="openPhoto(this.src)"
+         style="width:100%;border-radius:10px;cursor:pointer;">
+  </div>
+</div>
+
+<!-- ================================
+        FULLSCREEN PHOTO VIEWER
+     ================================ -->
+
+<div id="photoView"
+     style="
+       display:none;
+       position:fixed;
+       inset:0;
+       background:rgba(0,0,0,0.85);
+       z-index:3000;
+       justify-content:center;
+       align-items:center;
+     ">
+  
+  <img id="photoBig" src=""
+       style="max-width:90%;max-height:90%;border-radius:10px;">
+
+  <span onclick="closePhoto()"
+        style="
+          position:absolute;
+          top:20px;
+          right:20px;
+          font-size:34px;
+          color:white;
+          cursor:pointer;
+          font-weight:bold;
+        ">
+    ✖
+  </span>
+</div>
+
+<script>
+function openPhoto(src){
+  document.getElementById("photoBig").src = src;
+  document.getElementById("photoView").style.display = "flex";
+}
+function closePhoto(){
+  document.getElementById("photoView").style.display = "none";
+}
+</script>
+
+<!-- END PART 3 -->
+<!-- ================================
+        SECTION 4 – BOOKING FORM
+     ================================ -->
+
+<h2 id="sec4_title" class="section-title">Booking Form</h2>
+
+<div class="container">
+
+  <div style="
+      background:white;
+      padding:15px;
+      border-radius:12px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.08);
+  ">
+
+    <label><b>Your Name</b></label>
+    <input id="b_name" type="text" placeholder="Enter your name"
+           style="width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;margin-bottom:8px;">
+
+    <label><b>Mobile Number</b></label>
+    <input id="b_phone" type="tel" placeholder="Enter phone"
+           style="width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;margin-bottom:8px;">
+
+    <label><b>No. of Persons</b></label>
+    <input id="b_persons" type="text" placeholder="Example: 4 members"
+           style="width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;margin-bottom:8px;">
+
+    <label><b>Travel Date</b></label>
+    <input id="b_date" type="date"
+           style="width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;margin-bottom:8px;">
+
+    <label><b>Pickup Location</b></label>
+    <input id="b_pickup" type="text" placeholder="Hotel / Cottage / Bus stand"
+           style="width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;margin-bottom:8px;">
+
+    <label><b>Message</b></label>
+    <textarea id="b_msg" rows="3" placeholder="Any special request?"
+              style="width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;margin-bottom:8px;"></textarea>
+
+    <button onclick="sendBooking()"
+            style="
+                width:100%;
+                background:#0b8f6b;
+                color:white;
+                padding:14px;
+                border:none;
+                border-radius:10px;
+                font-size:16px;
+                font-weight:bold;
+                margin-top:10px;
+            ">
+      SEND BOOKING ON WHATSAPP
+    </button>
+
+  </div>
+</div>
+
+<script>
+function sendBooking(){
+  const name = document.getElementById("b_name").value.trim();
+  const phone = document.getElementById("b_phone").value.trim();
+
+  if(!name || !phone){
+    alert("Please enter Name and Mobile Number.");
+    return;
+  }
+
+  const text = 
+`📒 *NEW BOOKING REQUEST*
+-------------------------
+👤 Name: ${name}
+📞 Phone: ${phone}
+👥 Persons: ${document.getElementById("b_persons").value}
+📅 Date: ${document.getElementById("b_date").value}
+📍 Pickup: ${document.getElementById("b_pickup").value}
+
+💬 Message:
+${document.getElementById("b_msg").value}
+-------------------------
+Form Source: Tirumala Local Tour Page`;
+
+  const url = "https://wa.me/919154095125?text=" + encodeURIComponent(text);
+  window.open(url, "_blank");
+}
+</script>
+
+<!-- ================================
+        FLOATING WHATSAPP BUTTON
+     ================================ -->
+
+<div class="wa-float">
+  <a href="https://wa.me/919154095125" target="_blank">💬</a>
+</div>
+
+<!-- ================================
+        DRIVER AUTO BANNER SYSTEM
+     ================================ -->
+
+<script>
+const drivers = {
+  "S1": {
+    name: "Srinu",
+    phone: "9848056765",
+    taxi: "AP 03 U 7788",
+    price: "150",
+    photo: "images/s1.jpg"
+  },
+  "S2": {
+    name: "Kumar",
+    phone: "9000012345",
+    taxi: "AP 39 H 6550",
+    price: "150",
+    photo: "images/s2.jpg"
+  }
+};
+
+function loadDriver(){
+  const url = new URLSearchParams(window.location.search);
+  const id = url.get("driver");
+
+  if(!id || !drivers[id]) return;
+
+  const d = drivers[id];
+
+  // Show box
+  document.getElementById("driverBox").style.display = "flex";
+
+  // Fill data
+  document.getElementById("drv_img").src = d.photo;
+  document.getElementById("drv_name").innerText = d.name;
+  document.getElementById("drv_phone").innerText = d.phone;
+  document.getElementById("drv_taxi").innerText = d.taxi;
+  document.getElementById("drv_price").innerText = d.price;
+
+  // Update banner
+  document.getElementById("site_title").innerText =
+    "Tirumala Local Tour – Driver " + d.name;
+
+  document.getElementById("site_contact").innerText =
+    "📞 " + d.phone;
+
+  // Change banner color
+  document.querySelector(".hero").style.background = "#d35400";
+}
+
+loadDriver();
+</script>
+
+</body>
+</html>
